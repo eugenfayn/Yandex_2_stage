@@ -1,6 +1,5 @@
 #from numpy import int64, integer
 from datetime import datetime
-from turtle import update
 from typing import Optional,List
 from uuid import UUID
 from enum import Enum
@@ -43,7 +42,3 @@ class ShopUnitStatisticUnit(BaseModel):
 
 class ShopUnitStatisticResponse(BaseModel):
     items: List[ShopUnitStatisticUnit]
-
-class Error(BaseModel):
-    code: int
-    message: str
