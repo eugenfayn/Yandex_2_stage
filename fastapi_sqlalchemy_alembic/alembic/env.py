@@ -28,7 +28,7 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # ---------------- added code here -------------------------#
-import models
+import models.models as models
 #------------------------------------------------------------#
 # ---------------- changed code here -------------------------#
 # here target_metadata was equal to None

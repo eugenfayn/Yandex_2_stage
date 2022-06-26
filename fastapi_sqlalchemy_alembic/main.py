@@ -5,10 +5,10 @@ import os
 from fastapi_sqlalchemy import DBSessionMiddleware
 from fastapi_sqlalchemy import db
 from sqlalchemy.orm import Session
-from models import Unit
-from schema import ShopUnitImport,ShopUnit, ShopUnitImportRequest
+from models.models import Unit
+from schemas.schema import ShopUnitImport,ShopUnit, ShopUnitImportRequest
 from dotenv import load_dotenv
-import crud
+import utils.crud as crud
 from uuid import UUID
 from config import settings
 
