@@ -1,0 +1,29 @@
+Документация. 
+
+Разработан REST-API сервис на fastapi+postgresql. Для валидации данных и схем использовалась библиотека pydantic.
+Для запуска  необходимо:
+1. Перейти в папку fastapi_sqlalchemy_alembic
+1. Выполнить в терминале последовательно:
+    docker-compose build
+    docker-compose run web alembic revision --autogenerate
+    docker-compose run web alembic upgrade head
+    docker up
+2. После этого:
+    На localhost:8080/docs будет доступен openapi swagger. Через него можно выполнять запросы.
+    На localhosy:5050 будет доступна postgresql база. В файле docker-compose.yml описаны данные для входаЖ
+        - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+        - PGADMIN_DEFAULT_PASSWORD=admin
+
+
+Запросы:
+/POST/imports:
+    Принимает: {List[Unit],Date}
+	Что делает: Добавляет данные в базу данных. Релизовано и обновление, и добавление новых. При обновлении элемента меняется время. Если элемент поменял родителя, то меняется цена у обоих родителей(нового и старого)
+    
+/GET/nodes/{id}
+	Принимает: id
+	Возвращает: Если id существует в базе, возвращает всю информацию об этом элементе и его детях.
+
+/DELETE/{id}
+	Принимает: id
+	Что делает: Удаляет(если нашёл) элемент с id и все его дочерние элементы. Если удалённый элемент был ребёнком, цена родителя пересчитается.
