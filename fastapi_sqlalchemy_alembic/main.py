@@ -18,25 +18,24 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 app = FastAPI(title=settings.project_name,version=settings.project_vers)
 app.add_middleware(DBSessionMiddleware, db_url=os.environ["DATABASE_URL"])
 
-@app.post("/unitsss/",response_model=ShopUnit)  #Schema
-def create_user(user: ShopUnit): #Schema
-    db_user = Unit(
-        id=user.id, name=user.name, date=user.date,parentId=user.parentId,
-        type=user.type,price=user.price,children=user.children
-    )
-    print(type(db.session))
-    #db.session.add(db_user)
-    db.session.commit()
-    return db_user
+#@app.post("/unitsss/",response_model=ShopUnit)  #Schema
+#def create_user(user: ShopUnit): #Schema
+#    db_user = Unit(
+#        id=user.id, name=user.name, date=user.date,parentId=user.parentId,
+#        type=user.type,price=user.price,children=user.children
+#    )
+#    db.session.add(db_user)
+#    db.session.commit()
+#    return db_user
 
 @app.post("/imports",response_model=ShopUnitImport,description="дескрипшен")
 def create_unit(unit: ShopUnitImportRequest):
         crud.create_unit(db.session, unit)
     
-@app.get("/unit/", response_model=List[ShopUnit])
-def read_units():
-        units = crud.get_unit(db.session)
-        return units
+#@app.get("/unit/", response_model=List[ShopUnit])
+#def read_units():
+#        units = crud.get_unit(db.session)
+#        return units
 
 @app.get("/nodes/{id}",response_model=ShopUnit)
 def get_unit(id: UUID):

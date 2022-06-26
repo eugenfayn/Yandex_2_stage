@@ -6,9 +6,9 @@ from uuid import UUID
 import models.models as models
 import schemas.schema  as schemas
 
-# для запросов. Проверка просто для себя
-def get_unit(db):
-    return db.query(models.Unit).all()
+# Было проверой для себя роверка просто для себя
+#def get_unit(db):
+#   return db.query(models.Unit).all()
 
 # В зависимости от присутствия/отсутствия юнита берёт и выкидывает его
 def create_unit(db:Session,unit: schemas.ShopUnitImportRequest):
@@ -36,6 +36,7 @@ def delete_unit(db,id:UUID):
        db.delete(db_unit)
        db.commit()
        db_parent.price = new_price(db_parent.children)
+       db_parent.date = db_unit.date
        db.commit()
        db.refresh(db_parent)
     else:
@@ -50,7 +51,7 @@ def get_unit_id(db,id:UUID):
     return db_unit
 
 # вспомогательная
-def new_price(children):
+def new_price(children): 
     count = len(children)
     if count!=0:
         sum_ = 0
@@ -73,7 +74,9 @@ def update_unit(db,unit,item,db_unit):
             pass
         else: 
             db_old_parent.price = new_price(db_old_parent.children)
+            db_old_parent.date = unit.updateDate
             db_new_parent.price = new_price(db_new_parent.children)
+            db_new_parent.date = unit.updateDate
             db.commit()
             db.refresh(db_new_parent)
             db.refresh(db_old_parent)
@@ -85,12 +88,15 @@ def update_unit(db,unit,item,db_unit):
                 pass
             elif (db_old_parent.id == db_new_parent.id):
                 db_old_parent.price = new_price(db_old_parent.children)
+                db_old_parent.date = unit.updateDate
                 db.commit()
                 db.refresh(db_new_parent)
                 db.refresh(db_old_parent)
             else: 
                 db_old_parent.price = new_price(db_old_parent.children)
+                db_old_parent.date = unit.updateDate
                 db_new_parent.price = new_price(db_new_parent.children)
+                db_new_parent.date = unit.updateDate
                 db.commit()
                 db.refresh(db_new_parent)
                 db.refresh(db_old_parent)
@@ -103,5 +109,6 @@ def add_unit(db,unit,item,db_unit):
     if db_unit.parentId:
         db_new_parent = db.query(models.Unit).filter(models.Unit.id==item.parentId).first()
         db_new_parent.price=new_price(db_new_parent.children)
+        db_new_parent.date = db_unit.date
         db.commit()
         db.refresh(db_new_parent)

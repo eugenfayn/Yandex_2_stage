@@ -50,7 +50,7 @@ class ShopUnitImportRequest(BaseModel):
             datetime.fromisoformat(v[:-1])
         except:
             raise Error(status_code=400,message="Validation Error")
-        return v
+        return v[:-1]
 
     # валидатор уникальности id в рамках запроса
     @validator('items',pre=True)
